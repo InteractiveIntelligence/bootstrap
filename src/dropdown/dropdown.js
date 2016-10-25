@@ -91,6 +91,7 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
     appendTo = null,
     keynavEnabled = false,
     selectedOption = null,
+    dropUp = $element.hasClass('dropup'),
     body = $document.find('body');
 
   $element.addClass('dropdown');
@@ -198,7 +199,11 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
 
   scope.$watch('isOpen', function(isOpen, wasOpen) {
     if (appendTo && self.dropdownMenu) {
-      var pos = $position.positionElements($element, self.dropdownMenu, 'bottom-left', true),
+      var placement = 'bottom-left';
+      if (dropUp) {
+        placement = 'top-left';
+      }
+      var pos = $position.positionElements($element, self.dropdownMenu, placement, true),
         css,
         rightalign,
         scrollbarPadding,
@@ -238,6 +243,12 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
           css.right = window.innerWidth -
             (pos.left - appendOffset.left + $element.prop('offsetWidth')) + 'px';
         }
+      }
+
+      // If the menu is a drop up, it needs to be repositioned based the menu height
+      // and 4px to achieve the same effect as bootstrap
+      if(dropUp) {
+        css.top = pos.top - self.dropdownMenu.outerHeight() - 4 + 'px';
       }
 
       self.dropdownMenu.css(css);
