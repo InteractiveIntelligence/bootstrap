@@ -432,12 +432,12 @@ angular.module('ui.bootstrap.position', [])
        *   </ul>
        */
       positionElements: function(hostElem, targetElem, placement, appendToBody) {
+        //Use the DOM element to find the height and width prior to using the raw node
+        var targetHeight = targetElem.innerHeight();
+        var targetWidth = targetElem.innerWidth();
+        
         hostElem = this.getRawNode(hostElem);
         targetElem = this.getRawNode(targetElem);
-
-        // need to read from prop to support tests.
-        var targetWidth = angular.isDefined(targetElem.offsetWidth) ? targetElem.offsetWidth : targetElem.prop('offsetWidth');
-        var targetHeight = angular.isDefined(targetElem.offsetHeight) ? targetElem.offsetHeight : targetElem.prop('offsetHeight');
 
         placement = this.parsePlacement(placement);
 
