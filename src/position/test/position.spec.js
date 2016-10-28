@@ -6,6 +6,13 @@ describe('$uibPosition service', function () {
     this.prop = function(propName) {
       return propName === 'offsetWidth' ? width : height;
     };
+
+    this.innerHeight = function() {
+      return height;
+    };
+    this.innerWidth = function() {
+      return width;
+    };
   };
 
   var $document;

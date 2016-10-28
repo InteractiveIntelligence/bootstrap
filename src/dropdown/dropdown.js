@@ -198,32 +198,28 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
 
   scope.$watch('isOpen', function(isOpen, wasOpen) {
     if (appendTo && self.dropdownMenu) {
-      var pos = $position.positionElements($element, self.dropdownMenu, 'bottom-left', true),
+      var dropUp = $element.hasClass('dropup');
+      var rightalign = self.dropdownMenu.hasClass('dropdown-menu-right');
+      var placement = 'auto bottom-left';
+      if(dropUp && rightalign){
+        placement = 'auto top-right';
+      } else if (dropUp) {
+        placement = 'auto top-left';
+      } else if (rightalign) {
+        placement = 'auto bottom-right';
+      }
+     
+      var pos = $position.positionElements($element, self.dropdownMenu, placement, true),
         css,
-        rightalign,
         scrollbarPadding,
         scrollbarWidth = 0;
 
       css = {
         top: pos.top + 'px',
+        left: pos.left + 'px',
+        right: 'auto',
         display: isOpen ? 'block' : 'none'
       };
-
-      rightalign = self.dropdownMenu.hasClass('dropdown-menu-right');
-      if (!rightalign) {
-        css.left = pos.left + 'px';
-        css.right = 'auto';
-      } else {
-        css.left = 'auto';
-        scrollbarPadding = $position.scrollbarPadding(appendTo);
-
-        if (scrollbarPadding.heightOverflow && scrollbarPadding.scrollbarWidth) {
-          scrollbarWidth = scrollbarPadding.scrollbarWidth;
-        }
-
-        css.right = window.innerWidth - scrollbarWidth -
-          (pos.left + $element.prop('offsetWidth')) + 'px';
-      }
 
       // Need to adjust our positioning to be relative to the appendTo container
       // if it's not the body element
@@ -238,7 +234,7 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
           css.right = window.innerWidth -
             (pos.left - appendOffset.left + $element.prop('offsetWidth')) + 'px';
         }
-      }
+      } 
 
       self.dropdownMenu.css(css);
     }
