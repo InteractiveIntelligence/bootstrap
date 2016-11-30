@@ -483,8 +483,8 @@ angular.module('ui.bootstrap.position', [])
           bottom: $document[0].documentElement.clientHeight - clientCoordinates.clientY
         };
         var hostPosition = {
-          top: clientCoordinates.clientX,
-          left: clientCoordinates.clientY,
+          top: clientCoordinates.clientY,
+          left: clientCoordinates.clientX,
           height: 0,
           width: 0
         };

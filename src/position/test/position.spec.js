@@ -404,7 +404,7 @@ describe('$uibPosition service', function () {
     beforeEach(function() {
       $uibPosition.positionElement = jasmine.createSpy('positionElement');
 
-      clientCoords = { clientX: 20, clientY: 20};
+      clientCoords = { clientX: 20, clientY: 10};
       placement = 'some-placement';
       targetElem = new TargetElMock(10, 10);
 
@@ -413,12 +413,12 @@ describe('$uibPosition service', function () {
     it('should call positionElement', function() {
       expect($uibPosition.positionElement).toHaveBeenCalledWith(
         {
-          top: clientCoords.clientX,
-          left: clientCoords.clientY,
+          top: clientCoords.clientY,
+          left: clientCoords.clientX,
           right: $document[0].documentElement.clientWidth - clientCoords.clientX,
           bottom: $document[0].documentElement.clientHeight - clientCoords.clientY
         },
-        { top: clientCoords.clientX, left: clientCoords.clientY, height: 0, width: 0 },
+        { top: clientCoords.clientY, left: clientCoords.clientX, height: 0, width: 0 },
         targetElem,
         placement
       );
