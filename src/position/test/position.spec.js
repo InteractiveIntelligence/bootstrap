@@ -4,7 +4,8 @@ describe('$uibPosition service', function () {
     this.height = height;
 
     this.prop = function(propName) {
-      return propName === 'offsetWidth' ? width : height;
+      if (propName === 'offsetWidth') { return width; }
+      if (propName === 'offsetHeight') { return height; }
     };
   };
 
@@ -319,170 +320,207 @@ describe('$uibPosition service', function () {
     });
   });
 
-  describe('positionElements - append-to-body: false', function() {
-    var el;
+  describe('positionElements', function() {
+    var viewportOffset,
+      position,
+      offset,
+      hostElem,
+      targetElem,
+      placement;
 
     beforeEach(function() {
       //mock position info normally queried from the DOM
-      $uibPosition.position = function() {
-        return {
-          width: 20,
-          height: 20,
-          top: 100,
-          left: 100
-        };
+      position = {
+        width: 20,
+        height: 20,
+        top: 100,
+        left: 100
       };
-    });
 
-    it('should position element on top-center by default', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'other')).toBePositionedAt(90, 105);
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'top')).toBePositionedAt(90, 105);
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'top-center')).toBePositionedAt(90, 105);
-    });
-
-    it('should position on top-left', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'top-left')).toBePositionedAt(90, 100);
-    });
-
-    it('should position on top-right', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'top-right')).toBePositionedAt(90, 110);
-    });
-
-    it('should position elements on bottom-center when "bottom" specified', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'bottom')).toBePositionedAt(120, 105);
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'bottom-center')).toBePositionedAt(120, 105);
-    });
-
-    it('should position elements on bottom-left', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'bottom-left')).toBePositionedAt(120, 100);
-    });
-
-    it('should position elements on bottom-right', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'bottom-right')).toBePositionedAt(120, 110);
-    });
-
-    it('should position elements on left-center when "left" specified', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'left')).toBePositionedAt(105, 90);
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'left-center')).toBePositionedAt(105, 90);
-    });
-
-    it('should position elements on left-top when "left-top" specified', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'left-top')).toBePositionedAt(100, 90);
-    });
-
-    it('should position elements on left-bottom when "left-bottom" specified', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'left-bottom')).toBePositionedAt(110, 90);
-    });
-
-    it('should position elements on right-center when "right" specified', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'right')).toBePositionedAt(105, 120);
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'right-center')).toBePositionedAt(105, 120);
-    });
-
-    it('should position elements on right-top when "right-top" specified', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'right-top')).toBePositionedAt(100, 120);
-    });
-
-    it('should position elements on right-top when "right-top" specified', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'right-bottom')).toBePositionedAt(110, 120);
-    });
-  });
-
-  describe('positionElements - append-to-body: true', function() {
-    beforeEach(function() {
-      //mock offset info normally queried from the DOM
-      $uibPosition.offset = function() {
-        return {
-          width: 20,
-          height: 20,
-          top: 100,
-          left: 100
-        };
-      };
-    });
-
-    it('should position element on top-center by default', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'other', true)).toBePositionedAt(90, 105);
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'top', true)).toBePositionedAt(90, 105);
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'top-center', true)).toBePositionedAt(90, 105);
-    });
-
-    it('should position on top-left', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'top-left', true)).toBePositionedAt(90, 100);
-    });
-
-    it('should position on top-right', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'top-right', true)).toBePositionedAt(90, 110);
-    });
-
-    it('should position elements on bottom-center when "bottom" specified', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'bottom', true)).toBePositionedAt(120, 105);
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'bottom-center', true)).toBePositionedAt(120, 105);
-    });
-
-    it('should position elements on bottom-left', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'bottom-left', true)).toBePositionedAt(120, 100);
-    });
-
-    it('should position elements on bottom-right', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'bottom-right', true)).toBePositionedAt(120, 110);
-    });
-
-    it('should position elements on left-center when "left" specified', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'left', true)).toBePositionedAt(105, 90);
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'left-center', true)).toBePositionedAt(105, 90);
-    });
-
-    it('should position elements on left-top when "left-top" specified', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'left-top', true)).toBePositionedAt(100, 90);
-    });
-
-    it('should position elements on left-bottom when "left-bottom" specified', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'left-bottom', true)).toBePositionedAt(110, 90);
-    });
-
-    it('should position elements on right-center when "right" specified', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'right', true)).toBePositionedAt(105, 120);
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'right-center', true)).toBePositionedAt(105, 120);
-    });
-
-    it('should position elements on right-top when "right-top" specified', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'right-top', true)).toBePositionedAt(100, 120);
-    });
-
-    it('should position elements on right-bottom when "right-bottom" specified', function() {
-      expect($uibPosition.positionElements({}, new TargetElMock(10, 10), 'right-bottom', true)).toBePositionedAt(110, 120);
-    });
-  });
-
-  describe('smart positioning', function() {
-    var viewportOffset, el;
-
-    beforeEach(function() {
-      el = angular.element('<div></div>');
-      $document.find('body').append(el);
-
-      //mock position info normally queried from the DOM
-      $uibPosition.position = function() {
-        return {
-          width: 40,
-          height: 40,
-          top: 100,
-          left: 100
-        };
-      };
+      $uibPosition.position = jasmine.createSpy('position').and.returnValue(position);
 
       viewportOffset = {
-        width: 10,
-        height: 10,
         top: 10,
         bottom: 10,
         left: 10,
         right: 10
       };
 
-      $uibPosition.viewportOffset = function() {
-        return viewportOffset;
+      $uibPosition.viewportOffset = jasmine.createSpy('viewportOffset').and.returnValue(viewportOffset);
+
+      offset = {
+        width: 40,
+        height: 40,
+        top: 100,
+        left: 100
+      };
+
+      $uibPosition.offset = jasmine.createSpy('offset').and.returnValue(offset);
+
+      $uibPosition.positionElement = jasmine.createSpy('positionElement');
+
+      hostElem = {};
+      placement = 'some-placement';
+      targetElem = new TargetElMock(10, 10);
+    });
+
+    describe('with append-to-body: false', function() {
+      beforeEach(function() {
+        $uibPosition.positionElements(hostElem, targetElem, placement);
+      });
+      it('should get position', function() {
+        expect($uibPosition.position).toHaveBeenCalledWith(hostElem);
+      });
+      it('should not get offset', function() {
+        expect($uibPosition.offset).not.toHaveBeenCalled();
+      });
+      it('should get viewportOffset', function() {
+        expect($uibPosition.viewportOffset).toHaveBeenCalledWith(hostElem, undefined);
+      });
+      it ('should call positionElement', function() {
+        expect($uibPosition.positionElement).toHaveBeenCalledWith(viewportOffset, position, targetElem, placement);
+      });
+    });
+
+    describe('with append-to-body: true', function() {
+      beforeEach(function() {
+        $uibPosition.positionElements(hostElem, targetElem, placement, true);
+      });
+      it('should not get position', function() {
+        expect($uibPosition.position).not.toHaveBeenCalled();
+      });
+      it('should get offset', function() {
+        expect($uibPosition.offset).toHaveBeenCalledWith(hostElem);
+      });
+      it('should get viewportOffset', function() {
+        expect($uibPosition.viewportOffset).toHaveBeenCalledWith(hostElem, true);
+      });
+      it ('should call positionElement', function() {
+        expect($uibPosition.positionElement).toHaveBeenCalledWith(viewportOffset, offset, targetElem, placement);
+      });
+    });
+  });
+
+  describe('positionElementAt', function() {
+    var clientCoords, targetElem, placement;
+    beforeEach(function() {
+      $uibPosition.positionElement = jasmine.createSpy('positionElement');
+
+      clientCoords = { clientX: 20, clientY: 10};
+      placement = 'some-placement';
+      targetElem = new TargetElMock(10, 10);
+
+      $uibPosition.positionElementAt(clientCoords, targetElem, placement);
+    });
+    it('should call positionElement', function() {
+      expect($uibPosition.positionElement).toHaveBeenCalledWith(
+        {
+          top: clientCoords.clientY,
+          left: clientCoords.clientX,
+          right: $document[0].documentElement.clientWidth - clientCoords.clientX,
+          bottom: $document[0].documentElement.clientHeight - clientCoords.clientY
+        },
+        { top: clientCoords.clientY, left: clientCoords.clientX, height: 0, width: 0 },
+        targetElem,
+        placement
+      );
+    });
+  });
+
+  describe('positionElement', function() {
+    var hostOffset, hostPos, targetElem;
+    beforeEach(function() {
+      //mock offset info normally queried from the DOM
+      hostPos = {
+        width: 20,
+        height: 20,
+        top: 100,
+        left: 100
+      };
+
+      hostOffset = {
+        top: 10,
+        bottom: 10,
+        left: 10,
+        right: 10
+      };
+
+      targetElem = new TargetElMock(10, 10);
+    });
+
+    it('should position element on top-center by default', function() {
+      expect($uibPosition.positionElement(hostOffset, hostPos, targetElem, 'other')).toBePositionedAt(90, 105);
+      expect($uibPosition.positionElement(hostOffset, hostPos, targetElem, 'top')).toBePositionedAt(90, 105);
+      expect($uibPosition.positionElement(hostOffset, hostPos, targetElem, 'top-center')).toBePositionedAt(90, 105);
+    });
+
+    it('should position on top-left', function() {
+      expect($uibPosition.positionElement(hostOffset, hostPos, targetElem, 'top-left')).toBePositionedAt(90, 100);
+    });
+
+    it('should position on top-right', function() {
+      expect($uibPosition.positionElement(hostOffset, hostPos, targetElem, 'top-right')).toBePositionedAt(90, 110);
+    });
+
+    it('should position elements on bottom-center when "bottom" specified', function() {
+      expect($uibPosition.positionElement(hostOffset, hostPos, targetElem, 'bottom')).toBePositionedAt(120, 105);
+      expect($uibPosition.positionElement(hostOffset, hostPos, targetElem, 'bottom-center')).toBePositionedAt(120, 105);
+    });
+
+    it('should position elements on bottom-left', function() {
+      expect($uibPosition.positionElement(hostOffset, hostPos, targetElem, 'bottom-left')).toBePositionedAt(120, 100);
+    });
+
+    it('should position elements on bottom-right', function() {
+      expect($uibPosition.positionElement(hostOffset, hostPos, targetElem, 'bottom-right')).toBePositionedAt(120, 110);
+    });
+
+    it('should position elements on left-center when "left" specified', function() {
+      expect($uibPosition.positionElement(hostOffset, hostPos, targetElem, 'left')).toBePositionedAt(105, 90);
+      expect($uibPosition.positionElement(hostOffset, hostPos, targetElem, 'left-center')).toBePositionedAt(105, 90);
+    });
+
+    it('should position elements on left-top when "left-top" specified', function() {
+      expect($uibPosition.positionElement(hostOffset, hostPos, targetElem, 'left-top')).toBePositionedAt(100, 90);
+    });
+
+    it('should position elements on left-bottom when "left-bottom" specified', function() {
+      expect($uibPosition.positionElement(hostOffset, hostPos, targetElem, 'left-bottom')).toBePositionedAt(110, 90);
+    });
+
+    it('should position elements on right-center when "right" specified', function() {
+      expect($uibPosition.positionElement(hostOffset, hostPos, targetElem, 'right')).toBePositionedAt(105, 120);
+      expect($uibPosition.positionElement(hostOffset, hostPos, targetElem, 'right-center')).toBePositionedAt(105, 120);
+    });
+
+    it('should position elements on right-top when "right-top" specified', function() {
+      expect($uibPosition.positionElement(hostOffset, hostPos, targetElem, 'right-top')).toBePositionedAt(100, 120);
+    });
+
+    it('should position elements on right-bottom when "right-bottom" specified', function() {
+      expect($uibPosition.positionElement(hostOffset, hostPos, targetElem, 'right-bottom')).toBePositionedAt(110, 120);
+    });
+  });
+
+  describe('positionElement - smart positioning', function() {
+    var hostOffset, hostPos;
+
+    beforeEach(function() {
+      el = angular.element('<div></div>');
+      $document.find('body').append(el);
+
+      hostPos = {
+        width: 40,
+        height: 40,
+        top: 100,
+        left: 100
+      };
+
+      hostOffset = {
+        top: 10,
+        bottom: 10,
+        left: 10,
+        right: 10
       };
     });
 
@@ -493,65 +531,65 @@ describe('$uibPosition service', function () {
     // tests primary top -> bottom
     // tests secondary left -> right
     it('should position element on bottom-right when top-left does not fit', function() {
-      viewportOffset.bottom = 20;
-      viewportOffset.left = 20;
+      hostOffset.bottom = 20;
+      hostOffset.left = 20;
       el.css({ width: '60px', height: '20px' });
-      expect($uibPosition.positionElements({}, el, 'auto top-left')).toBePositionedAt(140, 80);
+      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto top-left')).toBePositionedAt(140, 80);
     });
 
     // tests primary bottom -> top
     // tests secondary right -> left
     it('should position element on top-left when bottom-right does not fit', function() {
-      viewportOffset.top = 20;
-      viewportOffset.right = 20;
+      hostOffset.top = 20;
+      hostOffset.right = 20;
       el.css({ width: '60px', height: '20px' });
-      expect($uibPosition.positionElements({}, el, 'auto bottom-right')).toBePositionedAt(80, 100);
+      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto bottom-right')).toBePositionedAt(80, 100);
     });
 
     // tests primary left -> right
     // tests secondary top -> bottom
     it('should position element on right-bottom when left-top does not fit', function() {
-      viewportOffset.top = 20;
-      viewportOffset.right = 20;
+      hostOffset.top = 20;
+      hostOffset.right = 20;
       el.css({ width: '20px', height: '60px' });
-      expect($uibPosition.positionElements({}, el, 'auto left-top')).toBePositionedAt(80, 140);
+      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto left-top')).toBePositionedAt(80, 140);
     });
 
     // tests primary right -> left
     // tests secondary bottom -> top
     it('should position element on left-top when right-bottom does not fit', function() {
-      viewportOffset.bottom = 20;
-      viewportOffset.left = 20;
+      hostOffset.bottom = 20;
+      hostOffset.left = 20;
       el.css({ width: '20px', height: '60px' });
-      expect($uibPosition.positionElements({}, el, 'auto right-bottom')).toBePositionedAt(100, 80);
+      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto right-bottom')).toBePositionedAt(100, 80);
     });
 
     // tests vertical center -> top
     it('should position element on left-top when left-center does not fit vetically', function() {
-      viewportOffset.bottom = 100;
+      hostOffset.bottom = 100;
       el.css({ width: '20px', height: '120px' });
-      expect($uibPosition.positionElements({}, el, 'auto left')).toBePositionedAt(100, 80);
+      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto left')).toBePositionedAt(100, 80);
     });
 
     // tests vertical center -> bottom
     it('should position element on left-bottom when left-center does not fit vertically', function() {
-      viewportOffset.top = 100;
+      hostOffset.top = 100;
       el.css({ width: '20px', height: '120px' });
-      expect($uibPosition.positionElements({}, el, 'auto left')).toBePositionedAt(20, 80);
+      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto left')).toBePositionedAt(20, 80);
     });
 
     // tests horizontal center -> left
     it('should position element on top-left when top-center does not fit horizontally', function() {
-      viewportOffset.right = 100;
+      hostOffset.right = 100;
       el.css({ width: '120px', height: '20px' });
-      expect($uibPosition.positionElements({}, el, 'auto top')).toBePositionedAt(80, 100);
+      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto top')).toBePositionedAt(80, 100);
     });
 
     // tests horizontal center -> right
     it('should position element on top-right when top-center does not fit horizontally', function() {
-      viewportOffset.left = 100;
+      hostOffset.left = 100;
       el.css({ width: '120px', height: '20px' });
-      expect($uibPosition.positionElements({}, el, 'auto top')).toBePositionedAt(80, 20);
+      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto top')).toBePositionedAt(80, 20);
     });
   });
 });

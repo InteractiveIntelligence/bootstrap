@@ -433,51 +433,108 @@ angular.module('ui.bootstrap.position', [])
        */
       positionElements: function(hostElem, targetElem, placement, appendToBody) {
         hostElem = this.getRawNode(hostElem);
+
+        var hostElemPos = appendToBody ? this.offset(hostElem) : this.position(hostElem);
+        var viewportOffset = this.viewportOffset(hostElem, appendToBody);
+
+        return this.positionElement(viewportOffset, hostElemPos, targetElem, placement);
+      },
+
+      /**
+       * Provides coordinates for an element to be positioned at relative to
+       * the horizontal and vertical client coordinates.  Passing 'auto' as part of the placement parameter
+       * will enable smart placement - where the element fits. i.e:
+       * 'auto left-top' will check to see if there is enough space to the left
+       * of the client coordinates to fit the targetElem, if not place right (same for secondary
+       * top placement). Available space is calculated using the client width and height.
+       *
+       * @param {element} clientCoordinates - The coordinates to position at.
+       * @param {element} targetElem - The element to position.
+       * @param {string=} [placement=top] - The placement for the targetElem,
+       *   default is 'top'. 'center' is assumed as secondary placement for
+       *   'top', 'left', 'right', and 'bottom' placements.  Available placements are:
+       *   <ul>
+       *     <li>top</li>
+       *     <li>top-right</li>
+       *     <li>top-left</li>
+       *     <li>bottom</li>
+       *     <li>bottom-left</li>
+       *     <li>bottom-right</li>
+       *     <li>left</li>
+       *     <li>left-top</li>
+       *     <li>left-bottom</li>
+       *     <li>right</li>
+       *     <li>right-top</li>
+       *     <li>right-bottom</li>
+       *   </ul>
+       *
+       * @returns {object} An object with the following properties:
+       *   <ul>
+       *     <li>**top**: Value for targetElem top.</li>
+       *     <li>**left**: Value for targetElem left.</li>
+       *     <li>**placement**: The resolved placement.</li>
+       *   </ul>
+       */
+      positionElementAt: function(clientCoordinates, targetElem, placement) {
+        var viewportOffset = {
+          top: clientCoordinates.clientY,
+          left: clientCoordinates.clientX,
+          right: $document[0].documentElement.clientWidth - clientCoordinates.clientX,
+          bottom: $document[0].documentElement.clientHeight - clientCoordinates.clientY
+        };
+        var hostPosition = {
+          top: clientCoordinates.clientY,
+          left: clientCoordinates.clientX,
+          height: 0,
+          width: 0
+        };
+        return this.positionElement(viewportOffset, hostPosition, targetElem, placement);
+      },
+
+      positionElement: function(hostOffset, hostPos, targetElem, placement) {
         targetElem = this.getRawNode(targetElem);
 
         // need to read from prop to support tests.
         var targetWidth = angular.isDefined(targetElem.offsetWidth) ? targetElem.offsetWidth : targetElem.prop('offsetWidth');
         var targetHeight = angular.isDefined(targetElem.offsetHeight) ? targetElem.offsetHeight : targetElem.prop('offsetHeight');
 
+
         placement = this.parsePlacement(placement);
 
-        var hostElemPos = appendToBody ? this.offset(hostElem) : this.position(hostElem);
         var targetElemPos = {top: 0, left: 0, placement: ''};
 
         if (placement[2]) {
-          var viewportOffset = this.viewportOffset(hostElem, appendToBody);
-
           var targetElemStyle = $window.getComputedStyle(targetElem);
           var adjustedSize = {
             width: targetWidth + Math.round(Math.abs(this.parseStyle(targetElemStyle.marginLeft) + this.parseStyle(targetElemStyle.marginRight))),
             height: targetHeight + Math.round(Math.abs(this.parseStyle(targetElemStyle.marginTop) + this.parseStyle(targetElemStyle.marginBottom)))
           };
 
-          placement[0] = placement[0] === 'top' && adjustedSize.height > viewportOffset.top && adjustedSize.height <= viewportOffset.bottom ? 'bottom' :
-                         placement[0] === 'bottom' && adjustedSize.height > viewportOffset.bottom && adjustedSize.height <= viewportOffset.top ? 'top' :
-                         placement[0] === 'left' && adjustedSize.width > viewportOffset.left && adjustedSize.width <= viewportOffset.right ? 'right' :
-                         placement[0] === 'right' && adjustedSize.width > viewportOffset.right && adjustedSize.width <= viewportOffset.left ? 'left' :
+          placement[0] = placement[0] === 'top' && adjustedSize.height > hostOffset.top && adjustedSize.height <= hostOffset.bottom ? 'bottom' :
+                         placement[0] === 'bottom' && adjustedSize.height > hostOffset.bottom && adjustedSize.height <= hostOffset.top ? 'top' :
+                         placement[0] === 'left' && adjustedSize.width > hostOffset.left && adjustedSize.width <= hostOffset.right ? 'right' :
+                         placement[0] === 'right' && adjustedSize.width > hostOffset.right && adjustedSize.width <= hostOffset.left ? 'left' :
                          placement[0];
 
-          placement[1] = placement[1] === 'top' && adjustedSize.height - hostElemPos.height > viewportOffset.bottom && adjustedSize.height - hostElemPos.height <= viewportOffset.top ? 'bottom' :
-                         placement[1] === 'bottom' && adjustedSize.height - hostElemPos.height > viewportOffset.top && adjustedSize.height - hostElemPos.height <= viewportOffset.bottom ? 'top' :
-                         placement[1] === 'left' && adjustedSize.width - hostElemPos.width > viewportOffset.right && adjustedSize.width - hostElemPos.width <= viewportOffset.left ? 'right' :
-                         placement[1] === 'right' && adjustedSize.width - hostElemPos.width > viewportOffset.left && adjustedSize.width - hostElemPos.width <= viewportOffset.right ? 'left' :
+          placement[1] = placement[1] === 'top' && adjustedSize.height - hostPos.height > hostOffset.bottom && adjustedSize.height - hostPos.height <= hostOffset.top ? 'bottom' :
+                         placement[1] === 'bottom' && adjustedSize.height - hostPos.height > hostOffset.top && adjustedSize.height - hostPos.height <= hostOffset.bottom ? 'top' :
+                         placement[1] === 'left' && adjustedSize.width - hostPos.width > hostOffset.right && adjustedSize.width - hostPos.width <= hostOffset.left ? 'right' :
+                         placement[1] === 'right' && adjustedSize.width - hostPos.width > hostOffset.left && adjustedSize.width - hostPos.width <= hostOffset.right ? 'left' :
                          placement[1];
 
           if (placement[1] === 'center') {
             if (PLACEMENT_REGEX.vertical.test(placement[0])) {
-              var xOverflow = hostElemPos.width / 2 - targetWidth / 2;
-              if (viewportOffset.left + xOverflow < 0 && adjustedSize.width - hostElemPos.width <= viewportOffset.right) {
+              var xOverflow = hostPos.width / 2 - targetWidth / 2;
+              if (hostOffset.left + xOverflow < 0 && adjustedSize.width - hostPos.width <= hostOffset.right) {
                 placement[1] = 'left';
-              } else if (viewportOffset.right + xOverflow < 0 && adjustedSize.width - hostElemPos.width <= viewportOffset.left) {
+              } else if (hostOffset.right + xOverflow < 0 && adjustedSize.width - hostPos.width <= hostOffset.left) {
                 placement[1] = 'right';
               }
             } else {
-              var yOverflow = hostElemPos.height / 2 - adjustedSize.height / 2;
-              if (viewportOffset.top + yOverflow < 0 && adjustedSize.height - hostElemPos.height <= viewportOffset.bottom) {
+              var yOverflow = hostPos.height / 2 - adjustedSize.height / 2;
+              if (hostOffset.top + yOverflow < 0 && adjustedSize.height - hostPos.height <= hostOffset.bottom) {
                 placement[1] = 'top';
-              } else if (viewportOffset.bottom + yOverflow < 0 && adjustedSize.height - hostElemPos.height <= viewportOffset.top) {
+              } else if (hostOffset.bottom + yOverflow < 0 && adjustedSize.height - hostPos.height <= hostOffset.top) {
                 placement[1] = 'bottom';
               }
             }
@@ -486,37 +543,37 @@ angular.module('ui.bootstrap.position', [])
 
         switch (placement[0]) {
           case 'top':
-            targetElemPos.top = hostElemPos.top - targetHeight;
+            targetElemPos.top = hostPos.top - targetHeight;
             break;
           case 'bottom':
-            targetElemPos.top = hostElemPos.top + hostElemPos.height;
+            targetElemPos.top = hostPos.top + hostPos.height;
             break;
           case 'left':
-            targetElemPos.left = hostElemPos.left - targetWidth;
+            targetElemPos.left = hostPos.left - targetWidth;
             break;
           case 'right':
-            targetElemPos.left = hostElemPos.left + hostElemPos.width;
+            targetElemPos.left = hostPos.left + hostPos.width;
             break;
         }
 
         switch (placement[1]) {
           case 'top':
-            targetElemPos.top = hostElemPos.top;
+            targetElemPos.top = hostPos.top;
             break;
           case 'bottom':
-            targetElemPos.top = hostElemPos.top + hostElemPos.height - targetHeight;
+            targetElemPos.top = hostPos.top + hostPos.height - targetHeight;
             break;
           case 'left':
-            targetElemPos.left = hostElemPos.left;
+            targetElemPos.left = hostPos.left;
             break;
           case 'right':
-            targetElemPos.left = hostElemPos.left + hostElemPos.width - targetWidth;
+            targetElemPos.left = hostPos.left + hostPos.width - targetWidth;
             break;
           case 'center':
             if (PLACEMENT_REGEX.vertical.test(placement[0])) {
-              targetElemPos.left = hostElemPos.left + hostElemPos.width / 2 - targetWidth / 2;
+              targetElemPos.left = hostPos.left + hostPos.width / 2 - targetWidth / 2;
             } else {
-              targetElemPos.top = hostElemPos.top + hostElemPos.height / 2 - targetHeight / 2;
+              targetElemPos.top = hostPos.top + hostPos.height / 2 - targetHeight / 2;
             }
             break;
         }
