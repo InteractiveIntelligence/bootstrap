@@ -321,6 +321,40 @@ An object with the following properties:
   _(Type: `number`)_ -
   The resolved placement with 'auto' removed.
 
+#### positionElementAt(clientCoordinates, targetElement, placement)
+
+Gets gets coordinates for an element to be positioned at relative to the horizontal and vertical client coordinates.
+
+##### parameters
+
+* `clientCoordinates`
+  _(Type: `Object`)_ -
+  The clientX and clientY coordinates to position against.
+
+* `targetElement`
+  _(Type: `element`)_ -
+  The element to position.
+
+* `placement`
+  _(Type: `string`, Default: `top`, optional)_ -
+  The placement for the target element.  See the parsePlacement() function for available options.  If 'auto' placement is used, the viewportOffset() function is used to decide where the targetElement will fit.
+
+##### returns
+
+An object with the following properties:
+
+* `top`
+  _(Type: `number`)_ -
+  The targetElement top value.
+
+* `left`
+  _(Type: `number`)_ -
+  The targetElement left value.
+
+* `right`
+  _(Type: `number`)_ -
+  The resolved placement with 'auto' removed.
+
 #### positionArrow(element, placement)
 
 Positions the tooltip and popover arrow elements when using placement options beyond the standard top, left, bottom, or right.
