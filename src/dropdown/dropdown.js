@@ -112,7 +112,12 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
       }
     }
 
-    appendToBody = angular.isDefined($attrs.dropdownAppendToBody);
+    if (angular.isDefined($attrs.dropdownAppendToBody)) {
+      var appendToBodyValue = $parse($attrs.dropdownAppendToBody)(scope);
+      if (appendToBodyValue !== false) {
+        appendToBody = true;
+      }
+    }
     keynavEnabled = angular.isDefined($attrs.keyboardNav);
 
     if (appendToBody && !appendTo) {
