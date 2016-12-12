@@ -88,6 +88,7 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
     setIsOpen = angular.noop,
     toggleInvoker = $attrs.onToggle ? $parse($attrs.onToggle) : angular.noop,
     appendToBody = false,
+    appendToBodyPlacement = null,
     appendTo = null,
     keynavEnabled = false,
     selectedOption = null,
@@ -196,53 +197,34 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
     }
   };
 
-  scope.$watch('isOpen', function(isOpen, wasOpen) {
-    if (appendTo && self.dropdownMenu) {
-      var pos = $position.positionElements($element, self.dropdownMenu, 'bottom-left', true),
-        css,
-        rightalign,
-        scrollbarPadding,
-        scrollbarWidth = 0;
-
-      css = {
-        top: pos.top + 'px',
-        display: isOpen ? 'block' : 'none'
-      };
-
-      rightalign = self.dropdownMenu.hasClass('dropdown-menu-right');
-      if (!rightalign) {
-        css.left = pos.left + 'px';
-        css.right = 'auto';
-      } else {
-        css.left = 'auto';
-        scrollbarPadding = $position.scrollbarPadding(appendTo);
-
-        if (scrollbarPadding.heightOverflow && scrollbarPadding.scrollbarWidth) {
-          scrollbarWidth = scrollbarPadding.scrollbarWidth;
-        }
-
-        css.right = window.innerWidth - scrollbarWidth -
-          (pos.left + $element.prop('offsetWidth')) + 'px';
+  function positionDropdownMenu(container) {
+    if (!self.dropdownMenu) { return; }
+    var placement = $attrs.dropdownPlacement;
+    if (!placement) {
+      var dropUp = container.hasClass('dropup') || $element.hasClass('dropup'),
+        rightAlign = self.dropdownMenu.hasClass('dropdown-menu-right');
+      placement = 'auto bottom-left';
+      if (dropUp && rightAlign) {
+        placement = 'auto top-right';
+      } else if (dropUp) {
+        placement = 'auto top-left';
+      } else if (rightAlign) {
+        placement = 'auto bottom-right';
       }
-
-      // Need to adjust our positioning to be relative to the appendTo container
-      // if it's not the body element
-      if (!appendToBody) {
-        var appendOffset = $position.offset(appendTo);
-
-        css.top = pos.top - appendOffset.top + 'px';
-
-        if (!rightalign) {
-          css.left = pos.left - appendOffset.left + 'px';
-        } else {
-          css.right = window.innerWidth -
-            (pos.left - appendOffset.left + $element.prop('offsetWidth')) + 'px';
-        }
-      }
-
-      self.dropdownMenu.css(css);
     }
+    self.dropdownMenu.css({ display: 'block' });
+    var pos = $position.positionElements(appendToBody ? $element : container, self.dropdownMenu, placement, appendToBody),
+      css;
 
+    css = {
+      top: pos.top + 'px',
+      left: pos.left + 'px',
+      right: 'auto'
+    };
+    self.dropdownMenu.css(css);
+  }
+
+  scope.$watch('isOpen', function(isOpen, wasOpen) {
     var openContainer = appendTo ? appendTo : $element;
     var hasOpenClass = openContainer.hasClass(appendTo ? appendToOpenClass : openClass);
 
@@ -262,10 +244,12 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
             var newEl = dropdownElement;
             self.dropdownMenu.replaceWith(newEl);
             self.dropdownMenu = newEl;
+            positionDropdownMenu(openContainer);
             $document.on('keydown', uibDropdownService.keybindFilter);
           });
         });
       } else {
+        positionDropdownMenu(openContainer);
         $document.on('keydown', uibDropdownService.keybindFilter);
       }
 
@@ -280,6 +264,9 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
         var newEl = angular.element('<ul class="dropdown-menu"></ul>');
         self.dropdownMenu.replaceWith(newEl);
         self.dropdownMenu = newEl;
+      }
+      if (self.dropdownMenu) {
+        self.dropdownMenu.css({ display: 'none' });
       }
 
       self.selectedOption = null;
