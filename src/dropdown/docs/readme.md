@@ -42,6 +42,25 @@ Each of these parts need to be used as attribute directives.
   <small class="badge">$</small> -
   An optional expression called when the dropdown menu is opened or closed.
 
+* `dropdown-placement`
+  <small class="badge">C</small>
+  _(Default: `auto bottom-left`, Config: `placement`)_ -
+  If specified, bootstrap's dropup and dropdown-menu-right classes will be ignored. Passing in 'auto' separated by a space before the placement will enable auto positioning, e.g: "auto bottom-left". The dropdown will attempt to position the menu where it fits in the closest scrollable ancestor. Accepts:
+
+   * `top` - menu on top, horizontally centered on host element.
+   * `top-left` - menu on top, left edge aligned with host element left edge.
+   * `top-right` - menu on top, right edge aligned with host element right edge.
+   * `bottom` - menu on bottom, horizontally centered on host element.
+   * `bottom-left` - menu on bottom, left edge aligned with host element left edge.
+   * `bottom-right` - menu on bottom, right edge aligned with host element right edge.
+   * `left` - menu on left, vertically centered on host element.
+   * `left-top` - menu on left, top edge aligned with host element top edge.
+   * `left-bottom` - menu on left, bottom edge aligned with host element bottom edge.
+   * `right` - menu on right, vertically centered on host element.
+   * `right-top` - menu on right, top edge aligned with host element top edge.
+   * `right-bottom` - menu on right, bottom edge aligned with host element bottom edge.
+
+
 ### uib-dropdown-menu settings
 
 * `template-url`
