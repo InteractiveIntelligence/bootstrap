@@ -65,7 +65,7 @@ angular.module('ui.bootstrap.position', [])
       offsetParent: function(elem) {
         elem = this.getRawNode(elem);
 
-        var offsetParent = elem.offsetParent || $document[0].documentElement;
+        var offsetParent = elem;
 
         function isStaticPositioned(el) {
           return ($window.getComputedStyle(el).position || 'static') === 'static';

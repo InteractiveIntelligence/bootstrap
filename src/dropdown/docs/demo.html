@@ -131,6 +131,129 @@
         </div>
       </div>
     </div>
+    <!-- Placement use case -->
+    <h4>Inline placement and positioning</h4>
+    <div class="btn-group dropup" uib-dropdown >
+      <button id="simple-btn-dropup" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+        Button dropup <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-dropup">
+        <li role="menuitem"><a href="#">Action</a></li>
+        <li role="menuitem"><a href="#">Another action</a></li>
+        <li role="menuitem"><a href="#">Something else here</a></li>
+        <li class="divider"></li>
+        <li role="menuitem"><a href="#">Separated link</a></li>
+      </ul>
+    </div>
+    <div class="btn-group" uib-dropdown >
+      <button id="simple-btn-menu-right" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+        Button dropdown-menu-right <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-menu-right">
+        <li role="menuitem"><a href="#">Action</a></li>
+        <li role="menuitem"><a href="#">Another action</a></li>
+        <li role="menuitem"><a href="#">Something else here</a></li>
+        <li class="divider"></li>
+        <li role="menuitem"><a href="#">Separated link</a></li>
+      </ul>
+    </div>
+    <div class="btn-group" uib-dropdown  dropdown-placement="top-left">
+      <button id="simple-btn-top-left" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+        Button top-left <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-top-left">
+        <li role="menuitem"><a href="#">Action</a></li>
+        <li role="menuitem"><a href="#">Another action</a></li>
+        <li role="menuitem"><a href="#">Something else here</a></li>
+        <li class="divider"></li>
+        <li role="menuitem"><a href="#">Separated link</a></li>
+      </ul>
+    </div>
+    <div class="btn-group" uib-dropdown  dropdown-placement="bottom-right">
+      <button id="simple-btn-bottom-right" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+        Button bottom-right <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-bottom-right">
+        <li role="menuitem"><a href="#">Action</a></li>
+        <li role="menuitem"><a href="#">Another action</a></li>
+        <li role="menuitem"><a href="#">Something else here</a></li>
+        <li class="divider"></li>
+        <li role="menuitem"><a href="#">Separated link</a></li>
+      </ul>
+    </div>
+    <div class="btn-group" uib-dropdown  dropdown-placement="right-top">
+      <button id="simple-btn-right-top" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+        Button right-top <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-right-top">
+        <li role="menuitem"><a href="#">Action</a></li>
+        <li role="menuitem"><a href="#">Another action</a></li>
+        <li role="menuitem"><a href="#">Something else here</a></li>
+        <li class="divider"></li>
+        <li role="menuitem"><a href="#">Separated link</a></li>
+      </ul>
+    </div>
+    <h4>append-to-body placement and positioning</h4>
+    <div class="btn-group dropup" uib-dropdown dropdown-append-to-body>
+      <button id="simple-btn-dropup-append-to-body" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+        Button dropup <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-dropup-append-to-body">
+        <li role="menuitem"><a href="#">Action</a></li>
+        <li role="menuitem"><a href="#">Another action</a></li>
+        <li role="menuitem"><a href="#">Something else here</a></li>
+        <li class="divider"></li>
+        <li role="menuitem"><a href="#">Separated link</a></li>
+      </ul>
+    </div>
+    <div class="btn-group" uib-dropdown dropdown-append-to-body dropdown-append-to-body>
+      <button id="simple-btn-menu-right-append-to-body" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+        Button dropdown-menu-right <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-menu-right-append-to-body">
+        <li role="menuitem"><a href="#">Action</a></li>
+        <li role="menuitem"><a href="#">Another action</a></li>
+        <li role="menuitem"><a href="#">Something else here</a></li>
+        <li class="divider"></li>
+        <li role="menuitem"><a href="#">Separated link</a></li>
+      </ul>
+    </div>
+    <div class="btn-group" uib-dropdown dropdown-append-to-body dropdown-placement="top-left">
+      <button id="simple-btn-top-left-append-to-body" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+        Button top-left <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-top-left-append-to-body">
+        <li role="menuitem"><a href="#">Action</a></li>
+        <li role="menuitem"><a href="#">Another action</a></li>
+        <li role="menuitem"><a href="#">Something else here</a></li>
+        <li class="divider"></li>
+        <li role="menuitem"><a href="#">Separated link</a></li>
+      </ul>
+    </div>
+    <div class="btn-group" uib-dropdown dropdown-append-to-body dropdown-placement="bottom-right">
+      <button id="simple-btn-bottom-right-append-to-body" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+        Button bottom-right <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-bottom-right-append-to-body">
+        <li role="menuitem"><a href="#">Action</a></li>
+        <li role="menuitem"><a href="#">Another action</a></li>
+        <li role="menuitem"><a href="#">Something else here</a></li>
+        <li class="divider"></li>
+        <li role="menuitem"><a href="#">Separated link</a></li>
+      </ul>
+    </div>
+    <div class="btn-group" uib-dropdown dropdown-append-to-body dropdown-placement="right-top">
+      <button id="simple-btn-right-top-append-to-body" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+        Button right-top <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-right-top-append-to-body">
+        <li role="menuitem"><a href="#">Action</a></li>
+        <li role="menuitem"><a href="#">Another action</a></li>
+        <li role="menuitem"><a href="#">Something else here</a></li>
+        <li class="divider"></li>
+        <li role="menuitem"><a href="#">Separated link</a></li>
+      </ul>
+    </div>
 
     <script type="text/ng-template" id="dropdown.html">
         <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="button-template-url">
