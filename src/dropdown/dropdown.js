@@ -87,9 +87,7 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
     getIsOpen,
     setIsOpen = angular.noop,
     toggleInvoker = $attrs.onToggle ? $parse($attrs.onToggle) : angular.noop,
-    appendToBody = false,
     appendToBodyPlacement = null,
-    appendTo = null,
     keynavEnabled = false,
     selectedOption = null,
     body = $document.find('body');
@@ -106,26 +104,7 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
       });
     }
 
-    if (angular.isDefined($attrs.dropdownAppendTo)) {
-      var appendToEl = $parse($attrs.dropdownAppendTo)(scope);
-      if (appendToEl) {
-        appendTo = angular.element(appendToEl);
-      }
-    }
-
-    appendToBody = angular.isDefined($attrs.dropdownAppendToBody);
     keynavEnabled = angular.isDefined($attrs.keyboardNav);
-
-    if (appendToBody && !appendTo) {
-      appendTo = body;
-    }
-
-    if (appendTo && self.dropdownMenu) {
-      appendTo.append(self.dropdownMenu);
-      $element.on('$destroy', function handleDestroyEvent() {
-        self.dropdownMenu.remove();
-      });
-    }
   };
 
   this.toggle = function(open) {
@@ -197,7 +176,8 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
     }
   };
 
-  function positionDropdownMenu(container) {
+  function positionDropdownMenu(appendTo, appendToBody) {
+    var container = appendTo ? appendTo : $element;
     if (!self.dropdownMenu) { return; }
     var placement = $attrs.dropdownPlacement;
     if (!placement) {
@@ -224,7 +204,41 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
     self.dropdownMenu.css(css);
   }
 
+  function removeDropdownMenu() {
+    self.dropdownMenu.remove();
+  }
+
   scope.$watch('isOpen', function(isOpen, wasOpen) {
+    var appendTo = null,
+      appendToBody = false;
+
+    if (angular.isDefined($attrs.dropdownAppendTo)) {
+      var appendToEl = $parse($attrs.dropdownAppendTo)(scope);
+      if (appendToEl) {
+        appendTo = angular.element(appendToEl);
+      }
+    }
+
+    if (angular.isDefined($attrs.dropdownAppendToBody)) {
+      var appendToBodyValue = $parse($attrs.dropdownAppendToBody)(scope);
+      if (appendToBodyValue !== false) {
+        appendToBody = true;
+      }
+    }
+
+    if (appendToBody && !appendTo) {
+      appendTo = body;
+    }
+
+    if (appendTo && self.dropdownMenu) {
+      if (isOpen) {
+        appendTo.append(self.dropdownMenu);
+        $element.on('$destroy', removeDropdownMenu);
+      } else {
+        $element.off('$destroy', removeDropdownMenu);
+        removeDropdownMenu();
+      }
+    }
     var openContainer = appendTo ? appendTo : $element;
     var hasOpenClass = openContainer.hasClass(appendTo ? appendToOpenClass : openClass);
 
@@ -244,12 +258,12 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
             var newEl = dropdownElement;
             self.dropdownMenu.replaceWith(newEl);
             self.dropdownMenu = newEl;
-            positionDropdownMenu(openContainer);
+            positionDropdownMenu(appendTo, appendToBody);
             $document.on('keydown', uibDropdownService.keybindFilter);
           });
         });
       } else {
-        positionDropdownMenu(openContainer);
+        positionDropdownMenu(appendTo, appendToBody);
         $document.on('keydown', uibDropdownService.keybindFilter);
       }
 
