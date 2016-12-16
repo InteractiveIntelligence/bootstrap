@@ -247,8 +247,8 @@ describe('uib-dropdown', function() {
           beforeEach(function() {
             toggle.trigger('click');
           });
-          it('removes the menu', function() {
-            expect($document.find('#dropdown-menu').length).toEqual(0);
+          it('removes the menu from body', function() {
+            expect($document.find('#dropdown-menu').parent()[0]).not.toBe($document.find('body')[0]);
           });
         });
 
@@ -262,8 +262,8 @@ describe('uib-dropdown', function() {
           it('focuses the dropdown element on close', function() {
             expect(document.activeElement).toBe(toggle[0]);
           });
-          it('removes the menu', function() {
-            expect($document.find('#dropdown-menu').length).toEqual(0);
+          it('removes the menu from body', function() {
+            expect($document.find('#dropdown-menu').parent()[0]).not.toBe($document.find('body')[0]);
           });
         });
         describe('when the dropdown is removed', function() {
@@ -271,8 +271,8 @@ describe('uib-dropdown', function() {
             element.remove();
             $rootScope.$digest();
           });
-          it('removes the menu', function() {
-            expect($document.find('#dropdown-menu').length).toEqual(0);
+          it('removes the menu from body', function() {
+            expect($document.find('#dropdown-menu').parent()[0]).not.toBe($document.find('body')[0]);
           });
         });
       });
@@ -311,8 +311,8 @@ describe('uib-dropdown', function() {
             beforeEach(function() {
               toggle.trigger('click');
             });
-            it('removes the menu', function() {
-              expect($document.find('#dropdown-menu').length).toEqual(0);
+            it('removes the menu from body', function() {
+              expect($document.find('#dropdown-menu').parent()[0]).not.toBe($document.find('body')[0]);
             });
           });
 
@@ -326,8 +326,8 @@ describe('uib-dropdown', function() {
             it('focuses the dropdown element on close', function() {
               expect(document.activeElement).toBe(toggle[0]);
             });
-            it('removes the menu', function() {
-              expect($document.find('#dropdown-menu').length).toEqual(0);
+            it('removes the menu from body', function() {
+              expect($document.find('#dropdown-menu').parent()[0]).not.toBe($document.find('body')[0]);
             });
           });
           describe('when the dropdown is removed', function() {
@@ -335,8 +335,8 @@ describe('uib-dropdown', function() {
               element.remove();
               $rootScope.$digest();
             });
-            it('removes the menu', function() {
-              expect($document.find('#dropdown-menu').length).toEqual(0);
+            it('removes the menu from body', function() {
+              expect($document.find('#dropdown-menu').parent()[0]).not.toBe($document.find('body')[0]);
             });
           });
         });
@@ -387,8 +387,8 @@ describe('uib-dropdown', function() {
             it('focuses the dropdown element on close', function() {
               expect(document.activeElement).toBe(toggle[0]);
             });
-            it('does not removes the menu', function() {
-              expect($document.find('#dropdown-menu').length).not.toEqual(0);
+            it('does not removes the menu from body', function() {
+              expect($document.find('#dropdown-menu').parent()[0]).not.toBe($document.find('body')[0]);
             });
           });
           describe('when the dropdown is removed', function() {
@@ -396,8 +396,8 @@ describe('uib-dropdown', function() {
               element.remove();
               $rootScope.$digest();
             });
-            it('removes the menu', function() {
-              expect($document.find('#dropdown-menu').length).toEqual(0);
+            it('removes the menu from body', function() {
+              expect($document.find('#dropdown-menu').parent()[0]).not.toBe($document.find('body')[0]);
             });
           });
         });
@@ -450,8 +450,8 @@ describe('uib-dropdown', function() {
         beforeEach(function() {
           toggle.trigger('click');
         });
-        it('removes the menu', function() {
-          expect($document.find('#dropdown-menu').length).toEqual(0);
+        it('removes the menu from the container', function() {
+          expect($document.find('#dropdown-menu').parent()[0]).not.toBe($document.find('body')[0]);
         });
         it('removes open class from container', function() {
           expect(container).not.toHaveClass('uib-dropdown-open');
@@ -468,8 +468,8 @@ describe('uib-dropdown', function() {
         it('focuses the dropdown element on close', function() {
           expect(document.activeElement).toBe(toggle[0]);
         });
-        it('removes the menu', function() {
-          expect($document.find('#dropdown-menu').length).toEqual(0);
+        it('removes the menu from the container', function() {
+          expect($document.find('#dropdown-menu').parent()[0]).not.toBe($document.find('body')[0]);
         });
         it('removes open class from container', function() {
           expect(container).not.toHaveClass('uib-dropdown-open');
@@ -480,8 +480,8 @@ describe('uib-dropdown', function() {
           element.remove();
           $rootScope.$digest();
         });
-        it('removes the menu', function() {
-          expect($document.find('#dropdown-menu').length).toEqual(0);
+        it('removes the menu from the container', function() {
+          expect($document.find('#dropdown-menu').parent()[0]).not.toBe($document.find('body')[0]);
         });
       });
     });

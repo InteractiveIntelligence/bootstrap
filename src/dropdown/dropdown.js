@@ -205,7 +205,7 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
   }
 
   function removeDropdownMenu() {
-    self.dropdownMenu.remove();
+    $element.append(self.dropdownMenu);
   }
 
   scope.$watch('isOpen', function(isOpen, wasOpen) {
