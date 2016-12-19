@@ -7,6 +7,7 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
 
 .service('uibDropdownService', ['$document', '$rootScope', function($document, $rootScope) {
   var openScope = null;
+  var parentScopes = [];
 
   this.open = function(dropdownScope, element) {
     if (!openScope) {
@@ -14,7 +15,19 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
     }
 
     if (openScope && openScope !== dropdownScope) {
-      openScope.isOpen = false;
+        
+      if (openScope.getDropdownElement().find(dropdownScope.getToggleElement()).length) {
+        //If the toggle for the new scope exists within the open dropdown, do not close the open dropdown
+        //Add the current open scope to the parent scope list so it can be closed later
+        parentScopes.push(openScope);
+      } else {
+        //Else, close the open scope and any present parent scopes, and clear out the parent scope list
+        openScope.isOpen = false;
+        parentScopes.forEach(function(scope) {
+          scope.isOpen = false;
+        });
+        parentScopes.length = 0;
+      }
     }
 
     openScope = dropdownScope;
@@ -22,9 +35,13 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
 
   this.close = function(dropdownScope, element) {
     if (openScope === dropdownScope) {
-      $document.off('click', closeDropdown);
-      $document.off('keydown', this.keybindFilter);
-      openScope = null;
+      if(parentScopes.length) {
+        openScope = parentScopes.pop();
+      } else {
+        $document.off('click', closeDropdown);
+        $document.off('keydown', this.keybindFilter);
+        openScope = null;
+      }
     }
   };
 
@@ -50,9 +67,15 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
 
     openScope.focusToggleElement();
     openScope.isOpen = false;
+    parentScopes.forEach(function(scope) {
+      scope.isOpen = false;
+    });
 
     if (!$rootScope.$$phase) {
       openScope.$apply();
+      parentScopes.forEach(function(scope) {
+        scope.$apply();
+      });
     }
   };
 
