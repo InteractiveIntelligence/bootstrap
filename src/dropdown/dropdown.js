@@ -31,6 +31,7 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
     }
 
     openScope = dropdownScope;
+    openScope.getDropdownElement().on('click', closeDropdown);
   };
 
   this.close = function(dropdownScope, element) {
@@ -40,6 +41,7 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
       } else {
         $document.off('mousedown', closeDropdown);
         $document.off('keydown', this.keybindFilter);
+        openScope.getDropdownElement().off('click', closeDropdown);
         openScope = null;
       }
     }
@@ -64,6 +66,11 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
       dropdownElement && dropdownElement[0].contains(evt.target)) {
       return;
     }
+
+    if (evt && dropdownElement && 
+      evt.type === 'mousedown' && dropdownElement[0].contains(evt.target)) {
+      return;
+    } 
 
     openScope.focusToggleElement();
     openScope.isOpen = false;
