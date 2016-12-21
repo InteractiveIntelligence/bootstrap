@@ -10,7 +10,7 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
 
   this.open = function(dropdownScope, element) {
     if (!openScope) {
-      $document.on('click', closeDropdown);
+      $document.on('click mousedown', closeDropdown);
     }
 
     if (openScope && openScope !== dropdownScope) {
@@ -22,7 +22,7 @@ angular.module('ui.bootstrap.dropdown', ['ui.bootstrap.position'])
 
   this.close = function(dropdownScope, element) {
     if (openScope === dropdownScope) {
-      $document.off('click', closeDropdown);
+      $document.off('click mousedown', closeDropdown);
       $document.off('keydown', this.keybindFilter);
       openScope = null;
     }
