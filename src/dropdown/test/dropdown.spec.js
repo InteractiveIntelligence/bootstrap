@@ -57,7 +57,7 @@ describe('uib-dropdown', function() {
       expect(element).toHaveClass(dropdownConfig.openClass);
 
       var optionEl = element.find('ul > li').eq(0).find('a').eq(0);
-      optionEl.mousedown();
+      optionEl.click();
       expect(element).not.toHaveClass(dropdownConfig.openClass);
     });
 
@@ -257,7 +257,7 @@ describe('uib-dropdown', function() {
           beforeEach(function() {
             menu = $document.find('#dropdown-menu a');
             menu.focus();
-            menu.trigger('mousedown');
+            menu.trigger('click');
           });
           it('focuses the dropdown element on close', function() {
             expect(document.activeElement).toBe(toggle[0]);
@@ -321,7 +321,7 @@ describe('uib-dropdown', function() {
             beforeEach(function() {
               menu = $document.find('#dropdown-menu a');
               menu.focus();
-              menu.trigger('mousedown');
+              menu.trigger('click');
             });
             it('focuses the dropdown element on close', function() {
               expect(document.activeElement).toBe(toggle[0]);
@@ -382,7 +382,7 @@ describe('uib-dropdown', function() {
             beforeEach(function() {
               menu = $document.find('#dropdown-menu a');
               menu.focus();
-              menu.trigger('mousedown');
+              menu.trigger('click');
             });
             it('focuses the dropdown element on close', function() {
               expect(document.activeElement).toBe(toggle[0]);
@@ -463,7 +463,7 @@ describe('uib-dropdown', function() {
         beforeEach(function() {
           menu = $document.find('#dropdown-menu a');
           menu.focus();
-          menu.trigger('mousedown');
+          menu.trigger('click');
         });
         it('focuses the dropdown element on close', function() {
           expect(document.activeElement).toBe(toggle[0]);
