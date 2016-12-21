@@ -57,14 +57,14 @@ describe('uib-dropdown', function() {
       expect(element).toHaveClass(dropdownConfig.openClass);
 
       var optionEl = element.find('ul > li').eq(0).find('a').eq(0);
-      optionEl.click();
+      optionEl.mousedown();
       expect(element).not.toHaveClass(dropdownConfig.openClass);
     });
 
     it('should close on document click', function() {
       clickDropdownToggle();
       expect(element).toHaveClass(dropdownConfig.openClass);
-      $document.click();
+      $document.mousedown();
       expect(element).not.toHaveClass(dropdownConfig.openClass);
     });
 
@@ -183,7 +183,7 @@ describe('uib-dropdown', function() {
       expect(element).toHaveClass(dropdownConfig.openClass);
 
       $rootScope.$apply(function() {
-        $document.click();
+        $document.mousedown();
       });
 
       expect(element).not.toHaveClass(dropdownConfig.openClass);
@@ -257,7 +257,7 @@ describe('uib-dropdown', function() {
           beforeEach(function() {
             menu = $document.find('#dropdown-menu a');
             menu.focus();
-            menu.trigger('click');
+            menu.trigger('mousedown');
           });
           it('focuses the dropdown element on close', function() {
             expect(document.activeElement).toBe(toggle[0]);
@@ -321,7 +321,7 @@ describe('uib-dropdown', function() {
             beforeEach(function() {
               menu = $document.find('#dropdown-menu a');
               menu.focus();
-              menu.trigger('click');
+              menu.trigger('mousedown');
             });
             it('focuses the dropdown element on close', function() {
               expect(document.activeElement).toBe(toggle[0]);
@@ -382,7 +382,7 @@ describe('uib-dropdown', function() {
             beforeEach(function() {
               menu = $document.find('#dropdown-menu a');
               menu.focus();
-              menu.trigger('click');
+              menu.trigger('mousedown');
             });
             it('focuses the dropdown element on close', function() {
               expect(document.activeElement).toBe(toggle[0]);
@@ -463,7 +463,7 @@ describe('uib-dropdown', function() {
         beforeEach(function() {
           menu = $document.find('#dropdown-menu a');
           menu.focus();
-          menu.trigger('click');
+          menu.trigger('mousedown');
         });
         it('focuses the dropdown element on close', function() {
           expect(document.activeElement).toBe(toggle[0]);
@@ -637,7 +637,7 @@ describe('uib-dropdown', function() {
         element = dropdown();
         clickDropdownToggle();
         expect(element).toHaveClass(dropdownConfig.openClass);
-        $document.click();
+        $document.mousedown();
         expect(element).not.toHaveClass(dropdownConfig.openClass);
       });
 
@@ -645,7 +645,7 @@ describe('uib-dropdown', function() {
         element = dropdown('');
         clickDropdownToggle();
         expect(element).toHaveClass(dropdownConfig.openClass);
-        $document.click();
+        $document.mousedown();
         expect(element).not.toHaveClass(dropdownConfig.openClass);
       });
     });
@@ -655,7 +655,7 @@ describe('uib-dropdown', function() {
         element = dropdown('disabled');
         clickDropdownToggle();
         expect(element).toHaveClass(dropdownConfig.openClass);
-        $document.click();
+        $document.mousedown();
         expect(element).toHaveClass(dropdownConfig.openClass);
       });
 
@@ -666,7 +666,7 @@ describe('uib-dropdown', function() {
 
         expect(element).toHaveClass(dropdownConfig.openClass);
         //should remain open
-        $document.click();
+        $document.mousedown();
         expect(element).toHaveClass(dropdownConfig.openClass);
         //now should close
         $rootScope.isopen = false;
@@ -713,7 +713,7 @@ describe('uib-dropdown', function() {
         expect(element).toHaveClass(dropdownConfig.openClass);
         element.find('ul li a').click();
         expect(element).toHaveClass(dropdownConfig.openClass);
-        $document.click();
+        $document.mousedown();
         expect(element).not.toHaveClass(dropdownConfig.openClass);
       });
 
@@ -724,7 +724,7 @@ describe('uib-dropdown', function() {
         expect(dropdownMenu.parent()).toHaveClass(dropdownConfig.appendToOpenClass);
         dropdownMenu.find('li').eq(0).trigger('click');
         expect(dropdownMenu.parent()).toHaveClass(dropdownConfig.appendToOpenClass);
-        $document.click();
+        $document.mousedown();
         expect(dropdownMenu.parent()).not.toHaveClass(dropdownConfig.appendToOpenClass);
       });
     });
