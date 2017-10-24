@@ -467,6 +467,8 @@ angular.module('ui.bootstrap.position', [])
        *     <li>right-top</li>
        *     <li>right-bottom</li>
        *   </ul>
+       *   @param {boolean=} [shiftTop=false]  - Determines if we should shift the top of the
+       *   target element if its bottomp position exceeds the bottom position of the viewport.
        *
        * @returns {object} An object with the following properties:
        *   <ul>
@@ -475,7 +477,7 @@ angular.module('ui.bootstrap.position', [])
        *     <li>**placement**: The resolved placement.</li>
        *   </ul>
        */
-      positionElementAt: function(clientCoordinates, targetElem, placement) {
+      positionElementAt: function(clientCoordinates, targetElem, placement, shiftTop) {
         var viewportOffset = {
           top: clientCoordinates.clientY,
           left: clientCoordinates.clientX,
@@ -488,10 +490,10 @@ angular.module('ui.bootstrap.position', [])
           height: 0,
           width: 0
         };
-        return this.positionElement(viewportOffset, hostPosition, targetElem, placement);
+        return this.positionElement(viewportOffset, hostPosition, targetElem, placement, shiftTop);
       },
 
-      positionElement: function(hostOffset, hostPos, targetElem, placement) {
+      positionElement: function(hostOffset, hostPos, targetElem, placement, shiftTop) {
         targetElem = this.getRawNode(targetElem);
 
         // need to read from prop to support tests.
@@ -577,7 +579,22 @@ angular.module('ui.bootstrap.position', [])
             }
             break;
         }
-
+        if (shiftTop == true) {
+          var containerBottomPosition = hostOffset.top + hostOffset.bottom;
+          var targetBottomPosition = hostOffset.top + targetHeight;
+          //If the target's element bottom position is further down than the bottom position of the
+          // container that its in, attempt to fit it within the container by shifting the target's
+          // element top position.
+          if(targetBottomPosition > containerBottomPosition) {
+            var overflowOffset = targetBottomPosition - containerBottomPosition;
+            if (overflowOffset >= hostOffset.top) {
+              targetElemPos.top = 0;
+            }
+            else {
+              targetElemPos.top = hostOffset.top - overflowOffset;
+            }
+          }
+        }
         targetElemPos.top = Math.round(targetElemPos.top);
         targetElemPos.left = Math.round(targetElemPos.left);
         targetElemPos.placement = placement[1] === 'center' ? placement[0] : placement[0] + '-' + placement[1];
