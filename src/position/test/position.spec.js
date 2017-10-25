@@ -13,23 +13,9 @@ describe('$uibPosition service', function () {
   var $document;
   var $uibPosition;
 
-  var DocumentService = function() {
-    var service = new Array(
-      {
-        documentElement: $('html')[0]
-      });
-    service[0].documentElement.clientWidth = 100;
-    service[0].documentElement.clientHeight = 100;
-    service[0].documentElement.scrollTop = 0;
-    service[0].documentElement.scrollLeft = 0;
-    service.find = function(selector) {
-      return $(selector);
-    };
-    return  service;
-  };
   beforeEach(module('ui.bootstrap.position'));
   beforeEach(module(function($provide) {
-    $provide.service('$document', DocumentService);
+    //$provide.service('$document', DocumentService);
   }));
   beforeEach(inject(function(_$document_, _$uibPosition_) {
     $document = _$document_;
@@ -440,8 +426,7 @@ describe('$uibPosition service', function () {
         },
         { top: clientCoords.clientY, left: clientCoords.clientX, height: 0, width: 0 },
         targetElem,
-        placement,
-        false
+        placement
       );
     });
   });
@@ -562,7 +547,7 @@ describe('$uibPosition service', function () {
       hostOffset.top = 20;
       hostOffset.right = 20;
       el.css({ width: '60px', height: '20px' });
-      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto bottom-right')).toBePositionedAt(80, 100);
+      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto bottom-right')).toBePositionedAt(10, 100);
     });
 
     // tests primary left -> right
@@ -571,7 +556,7 @@ describe('$uibPosition service', function () {
       hostOffset.top = 20;
       hostOffset.right = 20;
       el.css({ width: '20px', height: '60px' });
-      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto left-top')).toBePositionedAt(80, 140);
+      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto left-top')).toBePositionedAt(0, 140);
     });
 
     // tests primary right -> left
@@ -580,53 +565,35 @@ describe('$uibPosition service', function () {
       hostOffset.bottom = 20;
       hostOffset.left = 20;
       el.css({ width: '20px', height: '60px' });
-      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto right-bottom')).toBePositionedAt(100, 80);
+      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto right-bottom')).toBePositionedAt(0, 80);
     });
 
     // tests vertical center -> top
     it('should position element on left-top when left-center does not fit vetically', function() {
       hostOffset.bottom = 100;
       el.css({ width: '20px', height: '120px' });
-      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto left')).toBePositionedAt(100, 80);
+      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto left')).toBePositionedAt(0, 80);
     });
 
     // tests vertical center -> bottom
     it('should position element on left-bottom when left-center does not fit vertically', function() {
       hostOffset.top = 100;
       el.css({ width: '20px', height: '120px' });
-      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto left')).toBePositionedAt(20, 80);
+      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto left')).toBePositionedAt(0, 80);
     });
 
     // tests horizontal center -> left
     it('should position element on top-left when top-center does not fit horizontally', function() {
       hostOffset.right = 100;
       el.css({ width: '120px', height: '20px' });
-      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto top')).toBePositionedAt(80, 100);
+      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto top')).toBePositionedAt(0, 100);
     });
 
     // tests horizontal center -> right
     it('should position element on top-right when top-center does not fit horizontally', function() {
       hostOffset.left = 100;
       el.css({ width: '120px', height: '20px' });
-      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto top')).toBePositionedAt(80, 20);
-    });
-  });
-
-  describe('positionElementAt - shiftTop=true', function() {
-    var clientCoords, placement;
-    beforeEach(function() {
-      clientCoords = { clientX: 20, clientY: 10};
-      placement = 'bottom-left';
-    });
-    it('should shift the top position of the target element to the right offset', function() {
-      var targetElem = new TargetElMock(10, 90);
-      var position = $uibPosition.positionElementAt(clientCoords, targetElem, placement, true);
-      expect(position.top).toBe(10);
-    });
-    it('should shift the top position to 0', function() {
-      var targetElem = new TargetElMock(10, 5000);
-      var position = $uibPosition.positionElementAt(clientCoords, targetElem, placement, true);
-      expect(position.top).toBe(0);
+      expect($uibPosition.positionElement(hostOffset, hostPos, el, 'auto top')).toBePositionedAt(0, 20);
     });
   });
 });
