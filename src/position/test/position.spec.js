@@ -410,7 +410,7 @@ describe('$uibPosition service', function () {
       placement = 'some-placement';
       targetElem = new TargetElMock(10, 10);
 
-      $uibPosition.positionElementAt(clientCoords, targetElem, placement, false);
+      $uibPosition.positionElementAt(clientCoords, targetElem, placement);
     });
     it('should call positionElement', function() {
       expect($uibPosition.positionElement).toHaveBeenCalledWith(
