@@ -14,9 +14,6 @@ describe('$uibPosition service', function () {
   var $uibPosition;
 
   beforeEach(module('ui.bootstrap.position'));
-  beforeEach(module(function($provide) {
-    //$provide.service('$document', DocumentService);
-  }));
   beforeEach(inject(function(_$document_, _$uibPosition_) {
     $document = _$document_;
     $uibPosition = _$uibPosition_;
