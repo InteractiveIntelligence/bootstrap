@@ -577,7 +577,23 @@ angular.module('ui.bootstrap.position', [])
             }
             break;
         }
-
+        //If auto placement is set
+        if (placement[2] == true) {
+          var containerBottomPosition = hostOffset.top + hostOffset.bottom;
+          var targetBottomPosition = hostOffset.top + targetHeight;
+          //If the target's element bottom position is further down than the bottom position of the
+          // container that its in, attempt to fit it within the container by shifting the target's
+          // element top position.
+          if(targetBottomPosition > containerBottomPosition) {
+            var overflowOffset = targetBottomPosition - containerBottomPosition;
+            if (overflowOffset >= hostOffset.top) {
+              targetElemPos.top = 0;
+            }
+            else {
+              targetElemPos.top = hostOffset.top - overflowOffset;
+            }
+          }
+        }
         targetElemPos.top = Math.round(targetElemPos.top);
         targetElemPos.left = Math.round(targetElemPos.left);
         targetElemPos.placement = placement[1] === 'center' ? placement[0] : placement[0] + '-' + placement[1];
