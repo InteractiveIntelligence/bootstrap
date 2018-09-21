@@ -429,6 +429,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
     scope.labels = new Array(7);
     for (var j = 0; j < 7; j++) {
       scope.labels[j] = {
+        date: days[j].date,
         abbr: dateFilter(days[j].date, this.formatDayHeader),
         full: dateFilter(days[j].date, 'EEEE')
       };
