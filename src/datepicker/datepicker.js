@@ -337,7 +337,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
         return; // do nothing
       }
       $scope.select(self.activeDate);
-    } else if (evt.ctrlKey && (key === 'up' || key === 'down')) {
+    } else if ((evt.ctrlKey || evt.metaKey) && (key === 'up' || key === 'down')) {
       $scope.toggleMode(key === 'up' ? 1 : -1);
     } else {
       self.handleKeyDown(key, evt);
