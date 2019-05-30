@@ -38,6 +38,8 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
     $scope.datepickerOptions = {};
   }
 
+  $scope.maintainFocus = false;
+
   // Modes chain
   this.modes = ['day', 'month', 'year'];
 
@@ -212,6 +214,11 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
       date = dateParser.fromTimezone(date, ngModelOptions.timezone);
       ngModelCtrl.$setValidity('dateDisabled', !date ||
         this.element && !this.isDisabled(date));
+
+      if ($scope.maintainFocus) {
+        $scope.$broadcast('uib:datepicker.focus');
+        $scope.maintainFocus = false;
+      }
     }
   };
 
@@ -274,6 +281,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
   };
 
   $scope.select = function(date) {
+    $scope.maintainFocus = true;
     if ($scope.datepickerMode === self.minMode) {
       var dt = ngModelCtrl.$viewValue ? dateParser.fromTimezone(new Date(ngModelCtrl.$viewValue), ngModelOptions.timezone) : new Date(0, 0, 0, 0, 0, 0, 0);
       dt.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
@@ -291,6 +299,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
   };
 
   $scope.move = function(direction) {
+    $scope.maintainFocus = true;
     var year = self.activeDate.getFullYear() + direction * (self.step.years || 0),
         month = self.activeDate.getMonth() + direction * (self.step.months || 0);
     self.activeDate.setFullYear(year, month, 1);
@@ -298,6 +307,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
   };
 
   $scope.toggleMode = function(direction) {
+    $scope.maintainFocus = true;
     direction = direction || 1;
 
     if ($scope.datepickerMode === self.maxMode && direction === 1 ||
@@ -314,7 +324,8 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
   $scope.keys = { 13: 'enter', 32: 'space', 33: 'pageup', 34: 'pagedown', 35: 'end', 36: 'home', 37: 'left', 38: 'up', 39: 'right', 40: 'down' };
 
   var focusElement = function() {
-    self.element[0].focus();
+    var focusTarget = self.element[0].querySelector('[tabindex]:not([tabindex="-1"])');
+    focusTarget.focus();
   };
 
   // Listen for focus requests from popup directive
